@@ -5,8 +5,10 @@ const game = {
 	timeMeasure: 's',
 	isGoing: false,
 	alphabit: "АБВГҐДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЮЯ",
+	armsLegs: "ЛПВ",
 	countDown: 4000,
-	cardSize: 120,
+	cardWidth: 120,
+	cardHeight: 180,
 }
 
 $(document).ready(function(){
@@ -16,16 +18,17 @@ $(document).ready(function(){
 			let coord;
 			if(direction === "left"){
 				coord = Math.floor(Math.random()*screen.innerWidth());
-				if(coord + game.cardSize > screen.innerWidth())
-					coord -= game.cardSize;
+				if(coord + game.cardWidth > screen.innerWidth())
+					coord -= game.cardWidth;
+				if(coord - game.cardWidth > 0)
+					coord -= game.cardWidth;
 			}
 			else if(direction === "top"){
 				coord = Math.floor(Math.random()*screen.innerHeight());
-				if(coord + game.cardSize > screen.innerHeight())
-					coord -= game.cardSize;
-			}
-			if(coord - game.cardSize > 0){
-				coord -= game.cardSize;
+				if(coord + game.cardHeight > screen.innerHeight())
+					coord -= game.cardHeight;
+				if(coord - game.cardHeight > 0)
+					coord -= game.cardHeight;
 			}
 			return coord;
 		}
@@ -45,14 +48,18 @@ $(document).ready(function(){
 
 		//створюється картка з випадковою буквою з алфавіту
 		let card = $('#card');
-		card.text(game.alphabit[Math.floor(Math.random()*game.alphabit.length)]);
-		card.css({width: game.cardSize + "px", height: game.cardSize + "px"});
+		card.append("<p>" + game.alphabit[Math.floor(Math.random()*game.alphabit.length)] + "</>");
+		card.append("<p id = 'arms'>" + game.armsLegs[Math.floor(Math.random()*game.armsLegs.length)] + "</>");
+		card.append("<p id = 'legs'>" + game.armsLegs[Math.floor(Math.random()*game.armsLegs.length)] + "</>");
+		card.css({width: game.cardWidth + "px", height: game.cardHeight + "px"});
 		card.css({top: screen.innerHeight()/2 - card.innerHeight()/2,
 				  left: screen.innerWidth()/2 - card.innerWidth()/2});
 
 		//картка отримує нове випадкове значення і координату з інтервалом з game
 		let gameInterval = setInterval(function(){
 			card.text(game.alphabit[Math.floor(Math.random()*game.alphabit.length)]);
+			card.append("<p id = 'arms'>" + game.armsLegs[Math.floor(Math.random()*game.armsLegs.length)] + "</>");
+			card.append("<p id = 'legs'>" + game.armsLegs[Math.floor(Math.random()*game.armsLegs.length)] + "</>");
 			card.css({left: getRandomCoordinate("left"),
 					  top: getRandomCoordinate("top")});
 		}, game.period);
