@@ -5,7 +5,7 @@ const game = {
 	timeMeasure: 's',
 	isGoing: false,
 	alphabit: "АБВГҐДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЮЯ",
-	armsLegs: "ЛПВ",
+	armsLegs: "ЛЛППВ",
 	countDown: 4000,
 	cardWidth: 120,
 	cardHeight: 180,
