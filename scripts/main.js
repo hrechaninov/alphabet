@@ -1,4 +1,5 @@
 const game = {
+	id: 0,
 	period: 1000,
 	periodMeasure: 's',
 	time: 60000,
@@ -22,6 +23,8 @@ $(document).ready(function(){
 					coord -= game.cardWidth;
 				if(coord - game.cardWidth > 0)
 					coord -= game.cardWidth;
+				if(coord < 0 || coord + game.cardWidth > screen.innerWidth())
+					console.log('fail, width ' + coord);
 			}
 			else if(direction === "top"){
 				coord = Math.floor(Math.random()*screen.innerHeight());
@@ -29,6 +32,8 @@ $(document).ready(function(){
 					coord -= game.cardHeight;
 				if(coord - game.cardHeight > 0)
 					coord -= game.cardHeight;
+				if(coord < 0 || coord + game.cardHeight > screen.innerHeight())
+					console.log('fail, height ' + coord);
 			}
 			return coord;
 		}
@@ -39,6 +44,7 @@ $(document).ready(function(){
 		})
 
 		initializeInputs();
+		let id = game.id;
 
 		game.isGoing = true;
 		//створюється div на весь екран, в межах якого відбувається гра
@@ -65,7 +71,8 @@ $(document).ready(function(){
 		}, game.period);
 
 		let gameTime = setTimeout(function(){
-			console.log("Вийти з гри");
+			if (id != game.id) //якщо це лічильник не з цієї гри
+				return;        //вийти з функції
 			resolve();
 		}, game.time)
 	});
@@ -83,6 +90,7 @@ $(document).ready(function(){
 			if(game.timeMeasure == 'min')
 				game.time *= 60000;
 		}
+		game.id = Math.floor(Math.random()*1000000000);
 		game.isGoing = false;
 		game.countDown = 4000;
 	})
