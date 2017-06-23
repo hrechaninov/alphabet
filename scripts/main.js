@@ -8,8 +8,8 @@ const game = {
 	alphabit: "АБВГҐДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЮЯ",
 	armsLegs: "ЛЛППВ",
 	countDown: 4000,
-	cardWidth: 120,
-	cardHeight: 180,
+	cardWidth: 160,
+	cardHeight: 320,
 }
 
 $(document).ready(function(){
