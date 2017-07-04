@@ -11,6 +11,10 @@ const game = {
 	cardWidth: 160,
 	cardHeight: 320,
 }
+const timer = {
+	timeLeft: 0,
+	id: 0,
+}
 
 $(document).ready(function(){
 	const startGame = () => new Promise(function(resolve){
@@ -50,9 +54,10 @@ $(document).ready(function(){
 		//створюється div на весь екран, в межах якого відбувається гра
 		let screen = $('#main-screen');
 		screen.css({display: 'block'});
-		screen.append('<div id = "card"><div/>');
-
+		//створюється таймер зворотнього відліку
+		timer.id = setTimer();
 		//створюється картка з випадковою буквою з алфавіту
+		screen.append('<div id = "card"><div/>');
 		let card = $('#card');
 		card.append("<p>" + game.alphabit[Math.floor(Math.random()*game.alphabit.length)] + "</>");
 		card.append("<p id = 'arms'>" + game.armsLegs[Math.floor(Math.random()*game.armsLegs.length)] + "</>");
@@ -62,7 +67,7 @@ $(document).ready(function(){
 				  left: screen.innerWidth()/2 - card.innerWidth()/2});
 
 		//картка отримує нове випадкове значення і координату з інтервалом з game
-		let gameInterval = setInterval(function(){
+		game.id = setInterval(function(){
 			card.text(game.alphabit[Math.floor(Math.random()*game.alphabit.length)]);
 			card.append("<p id = 'arms'>" + game.armsLegs[Math.floor(Math.random()*game.armsLegs.length)] + "</>");
 			card.append("<p id = 'legs'>" + game.armsLegs[Math.floor(Math.random()*game.armsLegs.length)] + "</>");
@@ -70,12 +75,9 @@ $(document).ready(function(){
 					  top: getRandomCoordinate("top")});
 		}, game.period);
 
-		let gameTime = setTimeout(function(){
-			if (id != game.id) //якщо це лічильник не з цієї гри
-				return;        //вийти з функції
-			resolve();
-		}, game.time)
+		let gameTime = setTimeout(resolve, game.time)
 	});
+
 
 	const initializeInputs = () => new Promise(function(){
 		if(+$('#input-period').val()){
@@ -90,13 +92,20 @@ $(document).ready(function(){
 			if(game.timeMeasure == 'min')
 				game.time *= 60000;
 		}
-		game.id = Math.floor(Math.random()*1000000000);
+		timer.timeLeft = game.time;
 		game.isGoing = false;
 		game.countDown = 4000;
 	})
 
 	const endGame = function(){
 		game.isGoing = false;
+		clearTimeout(game.id);
+		game.id = 0;
+		clearInterval(timer.id);
+		timer.id = 0;
+		timer.timeLeft = 0;
+
+		$("#timer").hide().text("");
 		$('#card').remove();
 		$('#main-screen').hide();
 		$('#menu-screen').show();
@@ -124,6 +133,28 @@ $(document).ready(function(){
 			}
 		}, 1000)
 	});
+
+	function setTimer(){
+		function unifyTime(value){
+			if(value < 10){
+				return "0" + value;
+			}
+			else return "" + value;
+		}
+		function updateTimer(){
+			let minutes, seconds;
+
+			minutes = Math.floor(timer.timeLeft / 1000 / 60);
+			seconds = Math.floor(timer.timeLeft / 1000 - minutes * 60);
+
+			$("#timer").text(unifyTime(minutes) + ":" + unifyTime(seconds));
+			timer.timeLeft -= 1000;
+		}
+		updateTimer();
+		$("#timer").show();
+
+		return setInterval(updateTimer, 1000);
+	}
 
 	$('#start-button').click(function(){
 		let animationDuration = 300;
