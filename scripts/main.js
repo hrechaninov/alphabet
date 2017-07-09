@@ -17,6 +17,50 @@ const timer = {
 }
 
 $(document).ready(function(){
+	//onload функція самовиклику
+	(function(){
+		////читання з local storage даних про час та період гри
+		//та відображення їх у формі
+		let periodOk = (localStorage.getItem("period") !== null);
+		let periodMeasureOk = (localStorage.getItem("periodMeasure") !== null);
+		let timeOk = (localStorage.getItem("time") !== null);
+		let timeMeasureOk = (localStorage.getItem("timeMeasure") !== null);
+
+		if(periodOk)
+			game.period = +localStorage.getItem("period");
+		if(periodMeasureOk)
+			game.periodMeasure = localStorage.getItem("periodMeasure");
+		if(timeOk)
+			game.time = +localStorage.getItem("time");
+		if(timeMeasureOk)
+			game.timeMeasure = localStorage.getItem("timeMeasure");
+
+		if(periodOk){
+			if(game.periodMeasure === 's')
+				$("#input-period").val(game.period/1000);
+			else
+				$("#input-period").val(game.period);
+		}
+		if(periodMeasureOk){
+			let measure = "с";
+			if(game.periodMeasure === "ms")
+				measure = "мс"
+			$("#period-button").text(measure);
+		}
+		if(timeOk){
+			if(game.timeMeasure === 's')
+				$("#input-time").val(game.time/1000);
+			else
+				$("#input-time").val(game.time/60000);
+		}
+		if(timeMeasureOk){
+			let measure = "с";
+			if(game.timeMeasure === "min")
+				measure = "хв"
+			$("#time-button").text(measure);
+		}
+		//
+	}());
 	const startGame = () => new Promise(function(resolve){
 		function getRandomCoordinate(direction){
 			let screen = $("#main-screen");
@@ -78,7 +122,6 @@ $(document).ready(function(){
 		let gameTime = setTimeout(resolve, game.time)
 	});
 
-
 	const initializeInputs = () => new Promise(function(){
 		if(+$('#input-period').val()){
 			game.period = +$('#input-period').val();
@@ -95,6 +138,11 @@ $(document).ready(function(){
 		timer.timeLeft = game.time;
 		game.isGoing = false;
 		game.countDown = 4000;
+
+		localStorage.setItem("period", game.period + '');
+		localStorage.setItem("periodMeasure", game.periodMeasure + '');
+		localStorage.setItem("time", game.time + '');
+		localStorage.setItem("timeMeasure", game.timeMeasure + '');
 	})
 
 	const endGame = function(){
