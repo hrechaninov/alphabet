@@ -7,6 +7,7 @@ const game = {
 	isGoing: false,
 	alphabit: "АБВГҐДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЮЯ",
 	armsLegs: "ЛЛППВ",
+	checkLegs: true,
 	countDown: 4000,
 	cardWidth: 160,
 	cardHeight: 320,
@@ -19,47 +20,8 @@ const timer = {
 $(document).ready(function(){
 	//onload функція самовиклику
 	(function(){
-		////читання з local storage даних про час та період гри
-		//та відображення їх у формі
-		let periodOk = (localStorage.getItem("period") !== null);
-		let periodMeasureOk = (localStorage.getItem("periodMeasure") !== null);
-		let timeOk = (localStorage.getItem("time") !== null);
-		let timeMeasureOk = (localStorage.getItem("timeMeasure") !== null);
+		loadFromLocalStorage();
 
-		if(periodOk)
-			game.period = +localStorage.getItem("period");
-		if(periodMeasureOk)
-			game.periodMeasure = localStorage.getItem("periodMeasure");
-		if(timeOk)
-			game.time = +localStorage.getItem("time");
-		if(timeMeasureOk)
-			game.timeMeasure = localStorage.getItem("timeMeasure");
-
-		if(periodOk){
-			if(game.periodMeasure === 's')
-				$("#input-period").val(game.period/1000);
-			else
-				$("#input-period").val(game.period);
-		}
-		if(periodMeasureOk){
-			let measure = "с";
-			if(game.periodMeasure === "ms")
-				measure = "мс"
-			$("#period-button").text(measure);
-		}
-		if(timeOk){
-			if(game.timeMeasure === 's')
-				$("#input-time").val(game.time/1000);
-			else
-				$("#input-time").val(game.time/60000);
-		}
-		if(timeMeasureOk){
-			let measure = "с";
-			if(game.timeMeasure === "min")
-				measure = "хв"
-			$("#time-button").text(measure);
-		}
-		//
 	}());
 	const startGame = () => new Promise(function(resolve){
 		function getRandomCoordinate(direction){
@@ -101,20 +63,31 @@ $(document).ready(function(){
 		//створюється таймер зворотнього відліку
 		timer.id = setTimer();
 		//створюється картка з випадковою буквою з алфавіту
-		screen.append('<div id = "card"><div/>');
+		screen.append(`<div id = "card">
+					   	 <p id = 'letter'></p>
+					   	 <p id = 'arms'></p>
+					   	 <p id = 'legs'></p>
+					   <div/>`);
+
 		let card = $('#card');
-		card.append("<p>" + game.alphabit[Math.floor(Math.random()*game.alphabit.length)] + "</>");
-		card.append("<p id = 'arms'>" + game.armsLegs[Math.floor(Math.random()*game.armsLegs.length)] + "</>");
-		card.append("<p id = 'legs'>" + game.armsLegs[Math.floor(Math.random()*game.armsLegs.length)] + "</>");
+		let letter = $('#letter');
+		let arms = $('#arms');
+		let legs = $('#legs');
+
+		letter.text(game.alphabit[Math.floor(Math.random()*game.alphabit.length)]);
+		arms.text(game.armsLegs[Math.floor(Math.random()*game.armsLegs.length)]);
+		if(game.checkLegs)
+			legs.text(game.armsLegs[Math.floor(Math.random()*game.armsLegs.length)]);
 		card.css({width: game.cardWidth + "px", height: game.cardHeight + "px"});
 		card.css({top: screen.innerHeight()/2 - card.innerHeight()/2,
 				  left: screen.innerWidth()/2 - card.innerWidth()/2});
 
 		//картка отримує нове випадкове значення і координату з інтервалом з game
 		game.id = setInterval(function(){
-			card.text(game.alphabit[Math.floor(Math.random()*game.alphabit.length)]);
-			card.append("<p id = 'arms'>" + game.armsLegs[Math.floor(Math.random()*game.armsLegs.length)] + "</>");
-			card.append("<p id = 'legs'>" + game.armsLegs[Math.floor(Math.random()*game.armsLegs.length)] + "</>");
+			letter.text(game.alphabit[Math.floor(Math.random()*game.alphabit.length)]);
+			arms.text(game.armsLegs[Math.floor(Math.random()*game.armsLegs.length)]);
+			if(game.checkLegs)
+				legs.text(game.armsLegs[Math.floor(Math.random()*game.armsLegs.length)]);
 			card.css({left: getRandomCoordinate("left"),
 					  top: getRandomCoordinate("top")});
 		}, game.period);
@@ -138,11 +111,7 @@ $(document).ready(function(){
 		timer.timeLeft = game.time;
 		game.isGoing = false;
 		game.countDown = 4000;
-
-		localStorage.setItem("period", game.period + '');
-		localStorage.setItem("periodMeasure", game.periodMeasure + '');
-		localStorage.setItem("time", game.time + '');
-		localStorage.setItem("timeMeasure", game.timeMeasure + '');
+		loadToLocalStorage();
 	})
 
 	const endGame = function(){
@@ -204,6 +173,65 @@ $(document).ready(function(){
 		return setInterval(updateTimer, 1000);
 	}
 
+	function loadFromLocalStorage(){
+		let periodOk = (localStorage.getItem("period") !== null);
+		let periodMeasureOk = (localStorage.getItem("periodMeasure") !== null);
+		let timeOk = (localStorage.getItem("time") !== null);
+		let timeMeasureOk = (localStorage.getItem("timeMeasure") !== null);
+		let checkLegsOk = (localStorage.getItem("checkLegs") !== null);
+
+		if(periodOk)
+			game.period = +localStorage.getItem("period");
+		if(periodMeasureOk)
+			game.periodMeasure = localStorage.getItem("periodMeasure");
+		if(timeOk)
+			game.time = +localStorage.getItem("time");
+		if(timeMeasureOk)
+			game.timeMeasure = localStorage.getItem("timeMeasure");
+		if(checkLegsOk){
+			let bool = localStorage.getItem("checkLegs");
+			if(bool === "true")
+				bool = true;
+			else
+				bool = false;
+			game.checkLegs = bool;
+		}
+
+		if(periodOk){
+			if(game.periodMeasure === 's')
+				$("#input-period").val(game.period/1000);
+			else
+				$("#input-period").val(game.period);
+		}
+		if(periodMeasureOk){
+			let measure = "с";
+			if(game.periodMeasure === "ms")
+				measure = "мс"
+			$("#period-button").text(measure);
+		}
+		if(timeOk){
+			if(game.timeMeasure === 's')
+				$("#input-time").val(game.time/1000);
+			else
+				$("#input-time").val(game.time/60000);
+		}
+		if(timeMeasureOk){
+			let measure = "с";
+			if(game.timeMeasure === "min")
+				measure = "хв"
+			$("#time-button").text(measure);
+		}
+		if(checkLegsOk)
+			$("#checkbox-legs").prop("checked", game.checkLegs);
+	}
+	function loadToLocalStorage(){
+		localStorage.setItem("period", game.period + '');
+		localStorage.setItem("periodMeasure", game.periodMeasure + '');
+		localStorage.setItem("time", game.time + '');
+		localStorage.setItem("timeMeasure", game.timeMeasure + '');
+		localStorage.setItem("checkLegs", game.checkLegs + '');
+	}
+
 	$('#start-button').click(function(){
 		let animationDuration = 300;
 
@@ -243,6 +271,9 @@ $(document).ready(function(){
 				$('#input-time').val($('#input-time').val()*60);
 			}
 		}
+	});
+	$("#checkbox-legs").change(function(){
+		game.checkLegs = $(this).is(':checked');
 	});
 	$('#period-button').attr("title", "одиниці часу\n'с' - секунди\n'мс' - мілісекунди\nв одній секунді 1000 мілісекунд");
 	$('#time-button').attr("title", "одиниці часу\n'с' - секунди\n'хв' - хвилини");

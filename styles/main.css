@@ -5,6 +5,13 @@
 body{
 	background-color: #5dff35;
 	font-family: Arial;
+	font-size: 16pt;
+}
+div > p{
+	display: inline-block;
+}
+input[type=checkbox] {
+  transform: scale(1.5);
 }
 #menu-screen{
 	display: flex;
@@ -25,7 +32,7 @@ body{
 	width: 10em !important;
 }
 #menu-screen button, #menu-screen input{
-	font-size: 12pt;
+	font-size: inherit;
 }
 #card{
 	position: absolute;
@@ -48,7 +55,6 @@ body{
 	height: 100vh;
 }
 #timer{
-	display: inline-block;
 	float: right;
 	margin: 10px;
 	font-size: 32pt;
