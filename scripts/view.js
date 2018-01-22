@@ -1,22 +1,30 @@
-export class InterfaceItem{
-	constructor(DOM_element){
-		this._element = DOM_element;
+import $ from "jquery";
+
+class InterfaceItem{
+	constructor(query){
+		this._query = query;
 		this._isOnScreen = false;
-		this._width = DOM_element.offsetWidth;
-		this._height = DOM_element.offsetHeight;
-		this._top = DOM_element.offsetTop;
-		this._left = DOM_element.offsetLeft;
 	}
 	toggle(){
 		this._isOnScreen = !this._isOnScreen;
 	}
 	show(){
 		this.toggle();
-		this._animationShow(this._element);
+		if(typeof(this._animationShow) == "function"){
+			this._animationShow(this._query);
+		}
 	}
 	hide(){
 		this.toggle();
-		this._animationHide(this._element);
+		if(typeof(this._animationHide) == "function"){
+			this._animationHide(this._query);
+		}
+	}
+	onClick(){
+		this._functionOnClick();
+		if(typeof(this._animationOnClick) == "function"){
+			this._animationOnClick(this._query);
+		}
 	}
 	set animationShow(animationFunction){
 		this._animationShow = animationFunction;
@@ -24,10 +32,44 @@ export class InterfaceItem{
 	set animationHide(animationFunction){
 		this._animationHide = animationFunction;
 	}
-	get element(){
-		return this._element;
+	set animationOnClick(animationFunction){
+		this._animationOnClick = animationFunction;
+	}
+	set functionOnClick(functionOnClick){
+		this._functionOnClick = functionOnClick;
+	}
+	get query(){
+		return this._query;
 	}
 	get isOnScreen(){
 		return this._isOnScreen;
 	}
 }
+class Card extends InterfaceItem{
+	constructor(query){
+		super(query);
+	}
+	set fontSize(size){
+		this._fontSize = size;
+		this._query.css({"font-size": `${size}pt`});
+	}
+	set fontColor(color){
+		this._fontColor = color;
+		this._query.css({"color": color});
+	}
+	set borderWidth(width){
+		this._borderWidth = width;
+		this._query.css({"border-width": `${width}px`});
+	}
+	set borderColor(color){
+		this._borderColor = color;
+		this._query.css({"border-color": color});
+	}
+}
+
+export const startButton = new InterfaceItem($("#start-button"));
+export const logoBar = new InterfaceItem($("#logo-bar"));
+export const sidePanel = new InterfaceItem($("#side-panel"));
+export const timerBar = new InterfaceItem($("#timer-bar"));
+export const card  = new Card($("#card"));
+

@@ -45,10 +45,11 @@ export class Preferences{
 		}
 	}
 	static toLocalStorage(prefs){
-		localStorage.setItem("preferences", json.stringify(prefs));
+		localStorage.setItem("preferences", JSON.stringify(prefs));
 	}
 	static haveLocalCopy(){
-		const localPrefs = json.parse(localStorage.getItem("preferences"));
+		const localPrefs = null;
+		localPrefs = JSON.parse(localStorage.getItem("preferences"));
 
 		if(localPrefs === null){
 			return false;
@@ -58,7 +59,7 @@ export class Preferences{
 		}
 	}
 	static fromLocalStorage(prefs){
-		prefs = json.parse(localStorage.getItem("preferences"));
+		prefs = JSON.parse(localStorage.getItem("preferences"));
 	}
 	set interfaceLang(lang){
 		this._interfaceLang = lang;
@@ -71,8 +72,5 @@ export class Preferences{
 	}
 	set interval(interval){
 		this._interval = interval;
-	}
-	set fontSize(size){
-		this._fontSize = size;
 	}
 }
