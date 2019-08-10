@@ -1,12 +1,15 @@
+const path = require("path");
 
-module.exports = {
-	entry: './scripts/main.js',
+const config = {
+	entry: "./src/main.js",
 	output: {
-		filename: "bundle.js",
-		path: __dirname + "/dist"
+		path: path.resolve(__dirname, "dist"),
+		filename: "bundle.js"
 	},
 	devServer: {
-		contentBase: "./dist",
-		watchContentBase: true
+		contentBase: path.join(__dirname, "dist"),
+		overlay: true
 	}
-}
+};
+
+module.exports = config;

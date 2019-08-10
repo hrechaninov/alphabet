@@ -1,34 +1,19 @@
 {
-  "name": "alphabit",
+  "name": "alphabet",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/index.js",
+  "main": "src/main.js",
   "scripts": {
-    "test": "mocha --require babel-polyfill --require babel-register",
-    "watch": "webpack --progress --watch",
-    "start": "webpack-dev-server --open --config webpack.config.js",
-    "build": "webpack --config webpack.config.js"
+	"test": "echo \"Error: no test specified\" && exit 1",
+	"serve": "webpack-dev-server --mode development",
+	"build": "webpack --mode production"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/hrechaninov/alphabit.git"
-  },
-  "keywords": [],
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/hrechaninov/alphabit/issues"
-  },
-  "homepage": "https://github.com/hrechaninov/alphabit#readme",
   "devDependencies": {
-    "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "babel-register": "^6.26.0",
-    "chai": "^4.1.2",
-    "webpack": "^3.10.0",
-    "webpack-dev-server": "^2.10.1"
-  },
-  "dependencies": {
-    "jquery": "^3.2.1"
+    "eslint": "^6.0.1",
+    "webpack": "^4.35.3",
+    "webpack-cli": "^3.3.6",
+    "webpack-dev-server": "^3.7.2"
   }
 }

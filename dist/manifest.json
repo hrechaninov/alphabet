@@ -1,0 +1,11 @@
+{
+	"name": "Alphabet",
+	"short_name": "Alphabet",
+	"display": "fullscreen",
+	"start_url": ".",
+	"icons": [{
+		"src": "./icons/main.png",
+		"sizes": "512x512",
+		"type": "image/png"
+	}]
+}

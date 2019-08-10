@@ -1,37 +1,276 @@
-*{
+@font-face{
+	font-family: "Fira Code";
+	src:
+		local("Fira Code"),
+		url(./fonts/FiraCode-Regular.woff2) format("woff2"),
+		url(./fonts/FiraCode-Regular.woff) format("woff"),
+		url(./fonts/FiraCode-Regular.ttf) format("truetype");
+}
+
+:root{
+	--font-size-xs: 0.8rem;
+	--font-size-s: 1rem;
+	--font-size-m: 1.5rem;
+	--prefs-left-offset: 35%;
+	--margin-prefs-input: var(--font-size-m);
+	--width-side-button: 4rem;
+	--padding-timer-group: calc(var(--font-size-m) * 0.5) var(--font-size-m);
+	--margin-timer-group: var(--font-size-m);
+	--size-icon: var(--font-size-m);
+
+	--color-prefs-page-primary: white;
+	--color-prefs-page-secondary: #26292C;
+	--color-prefs-page-ternary: #252526;
+	--color-prefs-page-ternary-comply: #454545;
+	--color-prefs-page-selection: rgba(255, 255, 255, 0.2);
+
+	--color-game-page-primary: white;
+	--color-game-page-secondary: #26292C;
+}
+*, *::before, *::after{
+	box-sizing: border-box;
 	margin: 0;
 	padding: 0;
 }
-header{
+.page{
 	position: absolute;
-	left: 0;
-	top:0;
-	width: 100%;
-	height: 80px;
-	/*dev-only*/
-	background-color: red;
-}
-#side-panel{
-	position: absolute;
-	visibility: hidden;
 	top: 0;
 	left: 0;
-	width: 20%;
-	height: 100vh;
-	max-width: 250px;
-	min-width: 80px;
-	/*dev-only*/
-	background-color: green;
+	width: 100%;
+	height: 100%;
+	min-height: 100vh;
+	overflow: hidden;
+}
+.page.hidden{
+	display: none;
+}
+#prefs-page{
+	background-color: var(--color-prefs-page-secondary);
+}
+#game-page{
+	background-color: var(--color-game-page-secondary);
+}
+#game-page.hide-cursor{
+	cursor: none;
+}
+.game-prefs{
+	list-style-type: none;
+	position: absolute;
+	top: 50%;
+	left: var(--prefs-left-offset);
+	width: calc(100% - var(--prefs-left-offset) - 2px);
+	transform: translateY(-50%);
+}
+.input-wrapper{
+	display: flex;
+	position: relative;
+	width: 100%;
+	flex-flow: row nowrap;
+	font-family: "Fira Code", sans-serif;
+	font-size: var(--font-size-m);
+	line-height: calc(var(--font-size-m) * 1.4);
+	color: var(--color-prefs-page-primary);
+}
+.input-wrapper.primary + .input-wrapper.secondary{
+	margin-top: var(--margin-prefs-input);
+}
+.input-label{
+	display: block;
+	position: relative;
+	color: inherit;
+	white-space: nowrap;
+	cursor: text;
+}
+.input-wrapper.invalid .input-label::before{
+	display: block;
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 100%;
+	width: 100%;
+	height: calc(var(--font-size-m) * 0.4);
+	transform: translateY(-50%);
+	background: url(./img/error-pattern.svg) repeat-x;
+}
+.input{
+	display: block;
+	position: relative;
+	flex-grow: 1;
+	font-family: inherit;
+	font-size: inherit;
+	line-height: inherit;
+	background: transparent;
+	border: none;
+	color: transparent;
+	padding-left: calc(var(--font-size-m) * 0.5);
+	overflow: hidden;
+}
+.input::selection{
+	background-color: var(--color-prefs-page-selection);
+}
+.input-label::selection{
+	background-color: var(--color-prefs-page-selection);
+}
+.input:hover, .input:focus{
+	outline: none;
+}
+.input-canvas{
+	position: absolute;
+	pointer-events: none;
+}
+.input-wrapper.focused::after{
+	content: "";
+	display: block;
+	position: absolute;
+	top: 5%;
+	left: var(--caret-left);
+	width: 1px;
+	height: 90%;
+	background-color: var(--color-prefs-page-primary);
+	pointer-events: none;
+}
+.color-shift{
+	transform: translateX(var(--shift));
+}
+.animate-caret::after{
+	animation: caret 1000ms steps(1) infinite;
+}
+.page-transition-button{
+	--icon-width: var(--font-size-m);
+	position: absolute;
+	width: var(--width-side-button);
+	height: 100%;
+
+	border: none;
+	background-color: transparent;
+	font-family: "Fira Code", sans-serif;
+	font-size: var(--font-size-m);
+	color: var(--color-prefs-page-primary);
+	opacity: 1;
+	cursor: pointer;
+	transition: opacity 0.2s;
+}
+.page-transition-button.light{
+	--focus-color: rgba(255, 255, 255, 0.05);
+	--active-color: rgba(255, 255, 255, 0.1);
+	color: var(--color-prefs-page-primary);
+}
+.page-transition-button.dark{
+	--focus-color: rgba(0, 0, 0, 0.05);
+	--active-color: rgba(0, 0, 0, 0.1);
+	color: var(--color-prefs-page-secondary);
+}
+.page-transition-button:focus, .page-transition-button:hover{
+	outline: none;
+	background-color: var(--focus-color);
+}
+.page-transition-button:active{
+	background-color: var(--active-color);
+}
+.page-transition-button.hidden:not(:focus):not(:hover){
+	opacity: 0;
 }
 #start-button{
-	position: absolute;
-	width: 320px;
-	height: 80px;
-	top: 65vh;
-	left: calc(50% - 160px);
-	border: none;
+	top: 0;
+	right: 0;
 }
-#main-field{
-	width: 100%;
-	height: 100vh;
+#stop-button{
+	color: var(--color-game-page-primary);
+	top: 0;
+	left: 0;
+}
+.timer-group-wrapper{
+	display: flex;
+	flex-flow: row nowrap;
+	position: absolute;
+	top: 0;
+	left: 50%;
+	padding: var(--padding-timer-group);
+	transform: translateX(calc(-50% - var(--size-icon) / 2 - var(--margin-timer-group) / 2));
+}
+.timer-group-button{
+	position: relative;
+	width: var(--size-icon);
+	height: var(--size-icon);
+	background: none;
+	border: none;
+	background-size: 100%;
+	background-repeat: no-repeat;
+	transition: transform 0.2s ease-out, opacity 0.1s ease-in;
+	cursor: pointer;
+	outline: none;
+}
+.timer-group-button:hover::after,
+.timer-group-button:focus::after{
+	display: block;
+	position: absolute;
+	left: 50%;
+	bottom: -100%;
+	content: "pause";
+	font-family: "Fira Code", sans-serif;
+	font-size: var(--font-size-xs);
+	padding: 0;
+	color: var(--color-game-page-primary);
+	background-color: var(--color-game-page-secondary);
+	transform: translateX(-50%);
+}
+.timer-group-button.hidden:not(:focus):not(:hover){
+	opacity: 0;
+	transform: translateY(-10%);
+}
+#pause-button.light{
+	background: url("./icons/pause-light.svg") no-repeat;
+	background-size: 200%;
+}
+#pause-button.dark{
+	background: url("./icons/pause-dark.svg") no-repeat;
+	background-size: 200%;
+}
+#pause-button.passive{
+	background-position: 100% center;
+}
+#pause-button.active{
+	background-position: 0 center;
+}
+#pause-button.active:hover::after,
+#pause-button.active:focus::after{
+	content: "play";
+}
+#pause-button.passive:hover::after,
+#pause-button.passive:focus::after{
+	content: "pause";
+}
+#timer{
+	font-family: "Fira Code", sans-serif;
+	font-size: var(--font-size-m);
+	color: var(--color-game-page-primary);
+	line-height: var(--font-size-m);
+	margin-left: var(--margin-timer-group);
+	pointer-events: none;
+	user-select: none;
+}
+@keyframes caret{
+	0%{
+		opacity: 1;
+	}
+	50%{
+		opacity: 0;
+	}
+}
+
+@media screen and (max-width: 1000px){
+	:root{
+		--prefs-left-offset: 20%;
+	}
+}
+@media screen and (max-width: 600px){
+	:root{
+		--font-size-xs: 0.65rem;
+		--font-size-s: 0.8rem;
+		--font-size-m: 1rem;
+		--prefs-left-offset: 2rem;
+		--margin-prefs-input: var(--font-size-m);
+		--width-side-button: 3rem;
+		--size-icon: var(--font-size-m);
+	}
 }

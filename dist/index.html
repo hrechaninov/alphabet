@@ -1,40 +1,65 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-	<title>Test</title>
-	<link rel="stylesheet" type="text/css" href="main.css">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="apple-mobile-web-app-title" content="Alphabet">
+	<link rel="shortcut icon" href="./icons/main.png" type="image/x-icon">
+	<link rel="apple-touch-icon" href="./icons/main.png">
+	<link rel="stylesheet" href="main.css">
+	<link rel="manifest" href="manifest.json">
+	<title>Alphabet</title>
 </head>
 <body>
-	<header>
-		<div class = "logo-bar"></div>
-	</header>
-
-	<div id = "main-field"></div>
-
-	<div id = "side-panel">
-		<div class = "logo-bar"></div>
-
-		<ul id = "sibe-panel-list">
-			<li id = "li-home"></li>
-			<li id = "li-preferences"></li>
-			<li id = "li-help"></li>
+	<div class="page" id="prefs-page">
+		<ul class="game-prefs">
+			<li class="input-wrapper primary">
+				<label class="input-label" for="input-time">time:</label>
+				<input class="input input-value" type="text" id="input-time" value="3min">
+			</li>
+			<li class="input-wrapper primary">
+				<label class="input-label" for="input-frequency">frequency:</label>
+				<input class="input input-value" type="text" id="input-frequency" value="1s">
+			</li>
+			<li class="input-wrapper primary">
+				<label class="input-label" for="input-foot-letter">foot letter:</label>
+				<input class="input input-list" type="text" id="input-foot-letter" value="yes">
+			</li>
+			<li class="input-wrapper secondary">
+				<label class="input-label" for="input-font-size">font size:</label>
+				<input class="input input-value" type="text" id="input-font-size" value="64px">
+			</li>
+			<li class="input-wrapper secondary">
+				<label class="input-label" for="input-font-color">font color:</label>
+				<input class="input input-color" type="text" id="input-font-color" value="#fff">
+			</li>
+			<li class="input-wrapper secondary">
+				<label class="input-label" for="input-background-color">background color:</label>
+				<input class="input input-color" type="text" id="input-background-color" value="#26292C">
+			</li>
+			<li class="input-wrapper secondary">
+				<label class="input-label" for="input-position">position:</label>
+				<input class="input input-list" type="text" id="input-position" value="random">
+			</li>
+			<li class="input-wrapper secondary">
+				<label class="input-label" for="input-alphabet">alphabet:</label>
+				<input class="input input-list" type="text" id="input-alphabet" value="ukrainian">
+			</li>
 		</ul>
+		<button id="start-button" class="page-transition-button light">-></button>
+	</div>
+	<div class="page hidden" id="game-page">
+		<canvas id="game-page-canvas"></canvas>
+		<div class="timer-group-wrapper">
+			<button id="pause-button" class="timer-group-button passive light dark"></button>
+			<div id="timer">00:00</div>
+		</div>
+		<button id="stop-button" class="page-transition-button light"><-</button>
 	</div>
 
-	<button id = "start-button"></button>
-
-	<div id = "timer-bar">
-		<p id = "timer"></p>
-		<i id = "pause/play-icon"></i>
-		<i id = "stop-icon"></i>
-	</div>
-
-	<div id = "card">
-		<p id = "main-letter"></p>
-		<p id = "arm-letter"></p>
-		<p id = "leg-letter"></p>
-	</div>
-
-	<script type="text/javascript" src="bundle.js"></script>
+	<script src="bundle.js"></script>
 </body>
 </html>
