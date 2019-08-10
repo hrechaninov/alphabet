@@ -11,7 +11,7 @@ const toCache = [
 	"/",
 	"/bundle.js",
 	"/main.css",
-	"manifest.json",
+	"/manifest.json",
 	...images,
 	...icons
 ];
@@ -21,6 +21,7 @@ self.addEventListener("install", e => {
 		caches
 			.open(CACHE_NAME)
 			.then(cache => cache.addAll(toCache))
+			.catch(e => console.error(e))
 	);
 });
 self.addEventListener("activate", e => {
